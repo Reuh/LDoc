@@ -279,7 +279,7 @@ function File:finish()
             local summary = item.summary:gsub('%.$','')
             local lookup_name
             if doc.class_tag(item.type) then
-               display_name = 'Class '..item.name
+               display_name = item.name.." objects"
                lookup_name = item.name
                item.module = this_mod
                this_mod.items.by_name[item.name] = item
@@ -1063,9 +1063,9 @@ end
 local function reference (s, mod_ref, item_ref)
    local name = item_ref and item_ref.name or ''
    -- this is deeply hacky; classes have 'Class ' prepended.
---~    if item_ref and doc.class_tag(item_ref.type) then
---~       name = 'Class_'..name
---~    end
+   if item_ref and doc.class_tag(item_ref.type) then
+      name = name.."_objects"
+   end
    return {mod = mod_ref, name = name, label=s}
 end
 
