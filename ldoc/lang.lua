@@ -376,4 +376,87 @@ function Moon:item_follows (t,v,tok)
    end
 end
 
-return { lua = Lua(), cc = CC(), moon = Moon() }
+local Candran = class(Lua)
+
+function Candran:item_follows (t,v,tok)
+   local parser, case
+   local is_local = (t == 'keyword' and v == 'local') or (t == 'iden' and v == 'let')
+   if is_local then t,v = tnext(tok) end
+   if t == 'keyword' and v == 'function' then -- case [1]
+      case = 1
+      parser = parse_lua_function_header
+   elseif t == 'iden' then
+      local name,t,v = tools.get_fun_name(tok,v)
+      if t ~= '=' then return nil,"not  'name = function,table or value'" end
+      t,v = tnext(tok)
+      if t == 'keyword' and v == 'function' then -- case [2]
+         tnext(tok) -- skip '('
+         case = 2
+         parser = function(tags,tok)
+            tags:add('name',name)
+            parse_lua_parameters(tags,tok)
+         end
+      elseif t == ':' then -- case [2], Candran short style syntax with self
+         tnext(tok) -- skip '('
+         case = 2
+         parser = function(tags,tok)
+            tags:add('name',name)
+            parse_lua_parameters(tags,tok)
+            --tags.formal_args:insert(1, "self") -- LDoc seems to suppose most functions are methods by default...
+         end
+      elseif t == '(' or t == ':' then -- case [2], Candran short style syntax
+         case = 2
+         parser = function(tags,tok)
+            tags:add('name',name)
+            parse_lua_parameters(tags,tok)
+         end
+      elseif t == '{' then -- case [3]
+         case = 3
+         parser = function(tags,tok)
+            tags:add('class','table')
+            tags:add('name',name)
+            parse_lua_table (tags,tok)
+         end
+      else -- case [4]
+         case = 4
+         parser = function(tags)
+            tags:add('class','field')
+            tags:add('name',name)
+         end
+      end
+   elseif t == 'keyword' and v == 'return' then
+      t, v = tnext(tok)
+      if t == 'keyword' and v == 'function' then
+         -- return function(a, b, c)
+         tnext(tok) -- skip '('
+         case = 2
+         parser = parse_lua_parameters
+      elseif t == ':' then -- Candran short style syntax with self
+         -- return :(a, b, c) end
+         tnext(tok) -- skip '('
+         case = 2
+         parser = function(tags, tok)
+            parse_lua_parameters(tags, tok)
+            tags.formal_args:insert(1, "self")
+         end
+      elseif t == '(' then -- Candran short style syntax
+         -- return (a, b, c) end
+         case = 2
+         parser = parse_lua_parameters
+      elseif t ==  '{' then
+         -- return {...}
+         case = 5
+         parser = function(tags,tok)
+            tags:add('class','table')
+            parse_lua_table(tags,tok)
+         end
+      else
+         return nil,'not returning function or table'
+      end
+   else
+      return nil,"not 'name=value' or 'return value'"
+   end
+   return parser, is_local, case
+end
+
+return { lua = Lua(), cc = CC(), moon = Moon(), can = Candran() }
