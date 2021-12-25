@@ -195,37 +195,48 @@ return [==[
 #    end -- iter tags
 #   end
 
+#  local visible_param = false
 #  if show_parms and item.params and #item.params > 0 then
+#    for parm in iter(item.params) do
+#      if not item.modifiers.param[parm] or not item.modifiers.param[parm].hidden then
+#        visible_param = true
+#        break
+#      end
+#    end
+#  end
+#  if visible_param then
 #    local subnames = module.kinds:type_of(item).subnames
 #    if subnames then
     <h3>$(subnames):</h3>
 #    end
     <ul>
 #   for parm in iter(item.params) do
-#     local param,sublist = item:subparam(parm)
-#     if sublist then
-        <li><span class="parameter">$(sublist)</span>$(M(item.params.map[sublist],item))
-        <ul>
-#     end
-#     for p in iter(param) do
-#        local name,tp,def = item:display_name_of(p), ldoc.typename(item:type_of_param(p)), item:default_of_param(p)
-        <li><span class="parameter">$(name)</span>
-#       if tp ~= '' then
-            <span class="types">$(tp)</span>
+#     if not item.modifiers.param[parm] or not item.modifiers.param[parm].hidden then
+#       local param,sublist = item:subparam(parm)
+#       if sublist then
+          <li><span class="parameter">$(sublist)</span>$(M(item.params.map[sublist],item))
+          <ul>
 #       end
-        $(M(item.params.map[p],item))
-#       if def == true then
-         (<em>optional</em>)
-#      elseif def then
-         (<em>default</em> $(def))
+#       for p in iter(param) do
+#          local name,tp,def = item:display_name_of(p), ldoc.typename(item:type_of_param(p)), item:default_of_param(p)
+          <li><span class="parameter">$(name)</span>
+#         if tp ~= '' then
+              <span class="types">$(tp)</span>
+#         end
+          $(M(item.params.map[p],item))
+#           if def == true then
+           (<em>optional</em>)
+#        elseif def then
+           (<em>default</em> $(def))
+#         end
+#         if item:readonly(p) then
+            <em>readonly</em>
+#         end
+          </li>
 #       end
-#       if item:readonly(p) then
-          <em>readonly</em>
+#       if sublist then
+          </li></ul>
 #       end
-        </li>
-#     end
-#     if sublist then
-        </li></ul>
 #     end
 #   end -- for
     </ul>

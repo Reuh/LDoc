@@ -402,7 +402,7 @@ function Candran:item_follows (t,v,tok)
          parser = function(tags,tok)
             tags:add('name',name)
             parse_lua_parameters(tags,tok)
-            --tags.formal_args:insert(1, "self") -- LDoc seems to suppose most functions are methods by default...
+            tags.formal_args:insert(1, "self")
          end
       elseif t == '(' or t == ':' then -- case [2], Candran short style syntax
          case = 2

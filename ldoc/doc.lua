@@ -358,7 +358,14 @@ function File:finish()
                      end
                      -- Whether to use '.' or the language's version of ':' (e.g. \ for Moonscript)
                      item.name = class..(not static and this_mod.file.lang.method_call or '.')..item.name
-                   end
+                     -- Hide first "self" argument if it's a method (redundant with ':' method call)
+                     if not static then
+                        if item.params[1] == "self" then
+                           item.modifiers.param["self"].hidden = true
+                           item.args = item.args:gsub("^%(self%,? ?", "(")
+                        end
+                     end
+                  end
                   if stype == 'factory'  then
                      if item.tags.private then to_be_removed = true
                      elseif item.type == 'lfunction' then
@@ -673,6 +680,14 @@ function Item:finish()
       -- Params may have subfields.
       local fargs, formal = self.formal_args
       if fargs then
+         -- Implicitely document first self argument in a function.
+         if field == "param" and fargs[1] == "self" and not param_names[1] ~= "self" then
+            if #param_names > 0 then -- if no other param is documented, don't document self so LDoc can do its fallback thing
+               param_names:insert(1, "self")
+               comments:insert(1, "the object on which to call this method")
+            end
+            table.insert(self.modifiers.param, 1, {})
+         end
          if #param_names == 0 then
             --docs may be embedded in argument comments; in either case, use formal arg names
             local ret
