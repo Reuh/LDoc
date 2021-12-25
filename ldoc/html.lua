@@ -274,6 +274,12 @@ function ldoc.source_ref (fun)
       return allowed
    end
 
+   function ldoc.is_param_hidden(item, parm)
+      local field = item.parameter
+      local mod = item.modifiers[field]
+      return mod and mod[parm] and type(mod[parm]) == "table" and mod[parm].hidden
+   end
+
    local function set_charset (ldoc,m)
       m = m or ldoc.module
       ldoc.doc_charset = (m and m.tags.charset) or ldoc.charset

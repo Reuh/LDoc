@@ -222,7 +222,7 @@ return [==[
 #  local visible_param = false
 #  if show_parms and item.params and #item.params > 0 then
 #    for parm in iter(item.params) do
-#      if not item.modifiers.param[parm] or not item.modifiers.param[parm].hidden then
+#      if not ldoc.is_param_hidden(item, parm) then
 #        visible_param = true
 #        break
 #      end
@@ -235,7 +235,7 @@ return [==[
 #    end
     <ul>
 #   for parm in iter(item.params) do
-#     if not item.modifiers.param[parm] or not item.modifiers.param[parm].hidden then
+#     if not ldoc.is_param_hidden(item, parm) then
 #       local param,sublist = item:subparam(parm)
 #       if sublist then
           <li><span class="parameter">$(sublist)</span>$(M(item.params.map[sublist],item))
