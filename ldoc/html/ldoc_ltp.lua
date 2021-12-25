@@ -66,7 +66,13 @@ return [==[
 <h2>$(kind)</h2>
 <ul class="nowrap">
 # for item in items() do
+#  if item.type == "doc" then
+    </ul>
+    <h3><em><a href="#$(item.name)">$(M(display_name(item)))</a></em></h3>
+    <ul class="nowrap">
+#  else
     <li><a href="#$(item.name)">$(display_name(item))</a></li>
+#  end
 # end
 </ul>
 # end
@@ -135,10 +141,16 @@ return [==[
 <h2><a href="#$(no_spaces(kind))">$(kind)</a></h2>
 <table class="function_list">
 #  for item in items() do
-	<tr>
-	<td class="name" $(nowrap)><a href="#$(item.name)">$(display_name(item))</a></td>
-	<td class="summary">$(M(item.summary,item))</td>
-	</tr>
+#   if item.type == "doc" then
+    </table>
+    <h3><em><a href="#$(item.name)">$(M(display_name(item)))</a></em></h3>
+    <table class="function_list">
+#   else
+    <tr>
+    <td class="name" $(nowrap)><a href="#$(item.name)">$(display_name(item))</a></td>
+    <td class="summary">$(M(item.summary,item))</td>
+    </tr>
+#  end
 #  end -- for items
 </table>
 #end -- for kinds
@@ -172,7 +184,11 @@ return [==[
 #  for item in items() do
     <dt>
     <a name = "$(item.name)"></a>
+#   if item.type == "doc" then
+    <h3><em>$(M(display_name(item)))</em></h3>
+#   else
     <strong>$(display_name(item))</strong>
+#   end
 #   if ldoc.prettify_files and ldoc.is_file_prettified[item.module.file.filename] then
     <a style="float:right;" href="$(ldoc.source_ref(item))">line $(item.lineno)</a>
 #  end

@@ -328,6 +328,9 @@ local function parse_file(fname, lang, package, args)
                      tags:add('class','function')
                   end
                   item_follows, is_local, parse_error = false, false, false
+               elseif tags.doc then
+                  tags:add("name", tags.doc)
+                  item_follows, is_local, parse_error = false, false, false
                elseif args.no_args_infer then
                   F:error("No name and type provided (no_args_infer)")
                elseif lang:is_module_modifier (tags) then

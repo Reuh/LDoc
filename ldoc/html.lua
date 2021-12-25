@@ -93,7 +93,11 @@ function html.generate_output(ldoc, args, project)
 
    -- Item descriptions come from combining the summary and description fields
    function ldoc.descript(item)
-      return tools.join(' ', item.summary, item.description)
+      if item.type == "doc" then
+         return item.description
+      else
+         return tools.join(' ', item.summary, item.description)
+      end
    end
 
    function ldoc.module_name (mod)
@@ -187,6 +191,8 @@ function ldoc.source_ref (fun)
             name = name..' '
          end
          return name..item.args
+      elseif item.type == "doc" then
+         return item.summary
       else
          return name
       end

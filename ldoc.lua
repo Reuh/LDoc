@@ -156,6 +156,7 @@ end
 local function setup_kinds ()
    kind_names = ldoc.kind_names or {}
 
+   ModuleMap:add_kind(lookup('doc','Subjects'))
    ModuleMap:add_kind(lookup('function','Functions','Parameters'))
    ModuleMap:add_kind(lookup('table','Tables','Fields'))
    ModuleMap:add_kind(lookup('field','Fields'))
