@@ -83,6 +83,16 @@ p.name {
     margin-bottom: 0px;
 }
 
+#navigation h3 {
+    font-size: 16px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
 #content h1 {
     background-color: #2c3e67;
     color: white;
@@ -113,10 +123,23 @@ p.name {
     font-style: italic;
     padding-top: 15px;
     padding-bottom: 4px;
-    margin-right: 15px;
-    margin-left: 15px;
+    margin-right: 5px;
+    margin-left: 5px;
     margin-bottom: 5px;
     border-bottom: solid 1px #bcd;
+}
+
+#content h3.doc-title {
+    font-style: normal;
+    font-weight: bold;
+    padding-top: 10px;
+}
+#content h3.doc-title a {
+    color: #47555c;
+    text-decoration: none;
+}
+#content h3.doc-title a:hover {
+    text-decoration: underline;
 }
 
 #content h4 {
@@ -257,7 +280,7 @@ ul.nowrap {
     white-space:nowrap;
 }
 
-.section-description {
+.section-description, .doc-description {
     padding-left: 15px;
     padding-right: 15px;
 }

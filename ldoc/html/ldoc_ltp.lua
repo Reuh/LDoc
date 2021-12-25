@@ -68,7 +68,7 @@ return [==[
 # for item in items() do
 #  if item.type == "doc" then
     </ul>
-    <h3><em><a href="#$(item.name)">$(M(display_name(item)))</a></em></h3>
+    <h3 class="doc-title"><a href="#$(item.name)">$(M(display_name(item)))</a></h3>
     <ul class="nowrap">
 #  else
     <li><a href="#$(item.name)">$(display_name(item))</a></li>
@@ -143,7 +143,7 @@ return [==[
 #  for item in items() do
 #   if item.type == "doc" then
     </table>
-    <h3><em><a href="#$(item.name)">$(M(display_name(item)))</a></em></h3>
+    <h3 class="doc-title"><a href="#$(item.name)">$(M(display_name(item)))</a></h3>
     <table class="function_list">
 #   else
     <tr>
@@ -182,19 +182,27 @@ return [==[
 #   end
     <dl class="function">
 #  for item in items() do
+#   if item.type == "doc" then
+    </dl>
+    <h3 class="doc-title"><a name = "$(item.name)"></a>$(M(display_name(item)))</h3>
+    <div class="doc-description">
+#   else
     <dt>
     <a name = "$(item.name)"></a>
-#   if item.type == "doc" then
-    <h3><em>$(M(display_name(item)))</em></h3>
-#   else
     <strong>$(display_name(item))</strong>
 #   end
 #   if ldoc.prettify_files and ldoc.is_file_prettified[item.module.file.filename] then
     <a style="float:right;" href="$(ldoc.source_ref(item))">line $(item.lineno)</a>
 #  end
+#   if item.type ~= "doc" then
     </dt>
     <dd>
+#   end
     $(M(ldoc.descript(item),item))
+#   if item.type == "doc" then
+    </div>
+    <dl class="function">
+#   end
 
 #   if ldoc.custom_tags then
 #    for custom in iter(ldoc.custom_tags) do

@@ -198,5 +198,10 @@ dl.table dt, dl.function dt {border-top: 1px solid #ccc; padding-top: 1em;}
 dl.table dd, dl.function dd {padding-bottom: 1em; margin: 10px 0 0 20px;}
 dl.table h3, dl.function h3 {font-size: .95em;}
 
+.doc-title {
+    font-style: italic;
+    font-size: 1.15em !important;
+}
+
 ]]
 .. require('ldoc.html._code_css')
