@@ -363,7 +363,7 @@ function File:finish()
                      if not static then
                         if item.params[1] == "self" then
                            item.modifiers.param["self"].hidden = true
-                           item.args = item.args:gsub("^%(self%,? ?", "(")
+                           item.args = item.args:gsub("^%(self(%[*)%,? ?", "(%1")
                         end
                      end
                   end
